@@ -38,3 +38,5 @@ server/upload/
 
 # db
 db/docker
+.idea
+
