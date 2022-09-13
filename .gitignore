@@ -35,6 +35,7 @@ server/**/$*.ts
 server/**/*.db
 server/index.js
 server/upload/
+server/secret.json
 
 # db
 db/docker
