@@ -1,9 +1,8 @@
-export type UserInfo = {
+export type User = {
   id: string
   name: string
-  icon: string
 }
 
 export type AuthHeader = {
-  authorization: string
+  idToken: string
 }

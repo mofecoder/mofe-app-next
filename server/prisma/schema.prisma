@@ -7,9 +7,26 @@ generator client {
   provider = "prisma-client-js"
 }
 
+enum Role {
+    TEMPORARY
+    USER
+    ADMIN
+}
+
+model User {
+  id Int @id @default(autoincrement())
+  uid String @unique
+  role Role @default(USER)
+  userName String? @unique
+  email String
+  atcoderId String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Contest {
   id Int @id @default(autoincrement())
-  slug String
+  slug String @unique
   name String
   description String
   kind String

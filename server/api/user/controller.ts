@@ -1,10 +1,20 @@
 import { defineController } from './$relay'
-import { getUserInfoById, changeIcon } from '$/service/user'
+import { getUserByUid } from '$/service/user'
+import admin from 'firebase-admin'
 
 export default defineController(() => ({
-  get: ({ user }) => ({ status: 200, body: getUserInfoById(user.id) }),
-  post: async ({ user, body }) => ({
-    status: 201,
-    body: await changeIcon(user.id, body.icon)
-  })
+  post: async ({ headers }) => {
+    const { idToken } = headers
+    try {
+      const res = await admin.auth().verifyIdToken(idToken)
+      const user = await getUserByUid(res.uid)
+
+      if (user) {
+        // error
+      }
+
+    } catch {
+      return { status: 400 }
+    }
+  },
 }))

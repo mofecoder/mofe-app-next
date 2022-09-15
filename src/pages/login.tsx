@@ -4,7 +4,7 @@ import { auth } from '~/utils/auth'
 import { useAuth } from '~/hooks/useAuth'
 import { Button } from '@mui/material'
 
-const Login: NextPage = () => {
+const LoginPage: NextPage = () => {
   const { googleLogin } = useAuth()
 
   return <>
@@ -13,4 +13,4 @@ const Login: NextPage = () => {
   </>
 }
 
-export default Login
+export default LoginPage
