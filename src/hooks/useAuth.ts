@@ -1,4 +1,9 @@
-import { EmailAuthProvider, GithubAuthProvider, GoogleAuthProvider, signInWithPopup } from '@firebase/auth'
+import {
+  GithubAuthProvider,
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  signInWithPopup
+} from '@firebase/auth'
 import { auth } from '~/utils/auth'
 
 export const useAuth = () => {
@@ -10,9 +15,8 @@ export const useAuth = () => {
     const provider = new GithubAuthProvider()
     return signInWithPopup(auth, provider)
   }
-  const emailLogin = () => {
-    const provider = new EmailAuthProvider()
-    return signInWithPopup(auth, provider)
+  const emailLogin = (email: string, password: string) => {
+    return signInWithEmailAndPassword(auth, email, password)
   }
   return { googleLogin, githubLogin, emailLogin }
 }

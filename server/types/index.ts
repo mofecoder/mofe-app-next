@@ -1,8 +1,13 @@
+type Role = 'TEMPORARY' | 'USER' | 'ADMIN'
+
 export type User = {
-  id: string
-  name: string
+  uid: string
+  role: Role
+  userName: string | null
+  email: string
+  atcoderId: string | null
 }
 
 export type AuthHeader = {
-  idToken: string
+  idtoken: string
 }

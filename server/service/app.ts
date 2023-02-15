@@ -4,9 +4,10 @@ import helmet from '@fastify/helmet'
 import cors from '@fastify/cors'
 import fastifyStatic from '@fastify/static'
 import fastifyJwt from '@fastify/jwt'
+import cookie from '@fastify/cookie'
 import {
-  API_JWT_SECRET,
   API_BASE_PATH,
+  API_JWT_SECRET,
   API_UPLOAD_DIR
 } from '$/service/envValues'
 import server from '$/$server'
@@ -14,7 +15,14 @@ import server from '$/$server'
 export const init = (serverFactory?: FastifyServerFactory) => {
   const app = Fastify({ serverFactory })
   app.register(helmet)
-  app.register(cors)
+  app.register(cookie)
+  // TODO: FIXME
+  app.register(cors, {
+    credentials: true,
+    origin: (origin, callback) => {
+      callback(null, true)
+    }
+  })
   app.register(fastifyStatic, {
     root: path.join(__dirname, 'static'),
     prefix: '/static/'
