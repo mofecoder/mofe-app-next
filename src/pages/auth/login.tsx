@@ -29,6 +29,7 @@ const MyLink = React.forwardRef<
     {props.children}
   </Link>
 ))
+MyLink.displayName = 'MyLink'
 
 const LoginPage: NextPage = () => {
   const router = useRouter()

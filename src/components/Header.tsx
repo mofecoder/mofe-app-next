@@ -1,12 +1,5 @@
 import { FC, useCallback } from 'react'
-import {
-  AppBar,
-  Box,
-  IconButton,
-  Toolbar,
-  Tooltip,
-  Typography
-} from '@mui/material'
+import { AppBar, IconButton, Toolbar, Tooltip, Typography } from '@mui/material'
 import { useUser } from '~/hooks/useUser'
 import { AccountCircle, Login, Logout } from '@mui/icons-material'
 import { auth } from '~/utils/auth'
@@ -24,7 +17,7 @@ const Header: FC = () => {
   }, [])
 
   const signIn = async () => {
-    let query = router.pathname.startsWith('/auth')
+    const query = router.pathname.startsWith('/auth')
       ? undefined
       : { redirect: router.asPath }
     await router.push(pagesPath.auth.login.$url({ query }))
