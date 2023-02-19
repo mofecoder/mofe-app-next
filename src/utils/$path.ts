@@ -1,13 +1,13 @@
-import type { Query as Query0 } from '../pages/auth/login'
-import type { Query as Query1 } from '../pages/auth/register'
+import type { OptionalQuery as OptionalQuery0 } from '../pages/auth/login'
+import type { OptionalQuery as OptionalQuery1 } from '../pages/auth/register'
 
 export const pagesPath = {
   "auth": {
     "login": {
-      $url: (url: { query: Query0, hash?: string }) => ({ pathname: '/auth/login' as const, query: url.query, hash: url.hash })
+      $url: (url?: { query?: OptionalQuery0, hash?: string }) => ({ pathname: '/auth/login' as const, query: url?.query, hash: url?.hash })
     },
     "register": {
-      $url: (url: { query: Query1, hash?: string }) => ({ pathname: '/auth/register' as const, query: url.query, hash: url.hash })
+      $url: (url?: { query?: OptionalQuery1, hash?: string }) => ({ pathname: '/auth/register' as const, query: url?.query, hash: url?.hash })
     }
   },
   "createEmotionCache": {

@@ -29,7 +29,7 @@ import {
   UsableSymbols
 } from '~/utils/validator'
 
-export type Query = {
+export type OptionalQuery = {
   redirect?: string
 }
 
@@ -62,7 +62,7 @@ const AuthRegisterPage: NextPage = () => {
       return null
     }
 
-    const check = await apiClient.user.checkUsername.get({
+    const check = await apiClient.users.checkUsername.get({
       query: { userName: data.userName }
     })
     if (!check.body.isOk) {
@@ -96,7 +96,7 @@ const AuthRegisterPage: NextPage = () => {
       return
     }
 
-    await apiClient.user
+    await apiClient.users
       .post({
         headers: {
           idtoken: await user.getIdToken()

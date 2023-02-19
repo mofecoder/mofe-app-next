@@ -1,9 +1,18 @@
 import { FC, useCallback } from 'react'
-import { AppBar, Box, IconButton, Toolbar, Tooltip } from '@mui/material'
+import {
+  AppBar,
+  Box,
+  IconButton,
+  Toolbar,
+  Tooltip,
+  Typography
+} from '@mui/material'
 import { useUser } from '~/hooks/useUser'
 import { AccountCircle, Login, Logout } from '@mui/icons-material'
 import { auth } from '~/utils/auth'
 import { useRouter } from 'next/router'
+import { pagesPath } from '~/utils/$path'
+import Link from 'next/link'
 
 const Header: FC = () => {
   const { user } = useUser()
@@ -15,13 +24,18 @@ const Header: FC = () => {
   }, [])
 
   const signIn = async () => {
-    await router.push(`/auth/login?redirect=${router.pathname}`)
+    let query = router.pathname.startsWith('/auth')
+      ? undefined
+      : { redirect: router.asPath }
+    await router.push(pagesPath.auth.login.$url({ query }))
   }
 
   return (
     <AppBar position="static">
       <Toolbar>
-        <Box sx={{ flexGrow: 1 }} />
+        <Typography component={Link} href="/" variant="h6" sx={{ flexGrow: 1 }}>
+          MOFE
+        </Typography>
         {user ? (
           <>
             <IconButton size="large" color="inherit">

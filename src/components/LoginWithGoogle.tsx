@@ -2,12 +2,9 @@ import { Button, ButtonProps, styled } from '@mui/material'
 import { staticPath } from '~/utils/$path'
 import React, { useMemo } from 'react'
 
-type Props = {
-  disabled: boolean
-  onClick: ButtonProps['onClick']
-}
+type Props = Omit<ButtonProps, 'variant' | 'sx' | 'startIcon'>
 
-const LoginWithGoogle: React.FC<Props> = ({ onClick, disabled }) => {
+const LoginWithGoogle: React.FC<Props> = (props) => {
   const googleIcon = useMemo(() => {
     const Img = styled('img')(() => ({
       width: '40px',
@@ -32,9 +29,8 @@ const LoginWithGoogle: React.FC<Props> = ({ onClick, disabled }) => {
           backgroundColor: 'rgba(158,158,158,.2)'
         }
       }}
-      disabled={disabled}
       startIcon={googleIcon}
-      onClick={onClick}
+      {...props}
     >
       Google でログイン
     </Button>

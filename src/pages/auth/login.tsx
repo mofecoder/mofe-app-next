@@ -8,8 +8,11 @@ import LoginWithGoogle from '~/components/LoginWithGoogle'
 import { Box, Button, Stack, TextField } from '@mui/material'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { EmailValidator, PasswordValidator } from '~/utils/validator'
+import { pagesPath } from '~/utils/$path'
+import Link, { LinkProps } from 'next/link'
+import { getRedirectFromQuery } from '~/utils/query'
 
-export type Query = {
+export type OptionalQuery = {
   redirect?: string
 }
 
@@ -18,19 +21,27 @@ type LoginFormType = {
   password: string
 }
 
+const MyLink = React.forwardRef<
+  HTMLAnchorElement,
+  { to: LinkProps['href'] } & Omit<LinkProps, 'to' | 'ref'>
+>((props, ref) => (
+  <Link {...props} href={props.to} ref={ref}>
+    {props.children}
+  </Link>
+))
+
 const LoginPage: NextPage = () => {
   const router = useRouter()
   const { googleLogin, emailLogin } = useAuth()
   const { handleSubmit, control } = useForm<LoginFormType>()
 
   const [loading, setLoading] = useState<'google' | 'email' | null>(null)
+  const queryRedirect = getRedirectFromQuery(router.query.redirect)
 
-  const onEmailLogin = useCallback(async () => {
-    let queryRedirect = router.query.redirect
-    if (Array.isArray(queryRedirect)) queryRedirect = queryRedirect[0]
-
-    await router.push(queryRedirect ?? '/')
-  }, [router])
+  const onEmailLogin = useCallback(
+    async () => await router.push(queryRedirect ?? '/'),
+    []
+  )
   const onSubmit: SubmitHandler<LoginFormType> = async (data) => {
     setLoading('email')
     await emailLogin(data.email, data.password)
@@ -44,14 +55,12 @@ const LoginPage: NextPage = () => {
   const onGoogleLogin = useCallback(
     async (res: UserCredential) => {
       const idToken = await res.user.getIdToken()
-      apiClient.user.firebase
+      apiClient.users.firebase
         .post({
           headers: { idtoken: idToken }
         })
         .then((res) => {
           let pushTo = res.body.redirectUri
-          let queryRedirect = router.query.redirect
-          if (Array.isArray(queryRedirect)) queryRedirect = queryRedirect[0]
 
           if (pushTo === '/auth/register') {
             pushTo += '?redirect=' + queryRedirect
@@ -116,21 +125,34 @@ const LoginPage: NextPage = () => {
         )}
       />
 
-      <Button type="submit" color="primary" variant="contained">
-        ログイン
-      </Button>
-      <LoginWithGoogle
-        disabled={!!loading}
-        onClick={() => {
-          setLoading('google')
-          googleLogin()
-            .then(onGoogleLogin)
-            .catch((e) => {
-              console.log(e)
-              setLoading(null)
-            })
-        }}
-      />
+      <Stack spacing={2} sx={{ minWidth: '240px', m: 'auto' }}>
+        <Button type="submit" color="primary" variant="contained" fullWidth>
+          ログイン
+        </Button>
+        <LoginWithGoogle
+          disabled={!!loading}
+          onClick={() => {
+            setLoading('google')
+            googleLogin()
+              .then(onGoogleLogin)
+              .catch((e) => {
+                console.log(e)
+                setLoading(null)
+              })
+          }}
+        />
+        <Button
+          component={MyLink}
+          to={pagesPath.auth.register.$url({
+            query: { redirect: queryRedirect ?? undefined }
+          })}
+          color="info"
+          variant="text"
+          fullWidth
+        >
+          新規登録
+        </Button>
+      </Stack>
     </Stack>
   )
 }
