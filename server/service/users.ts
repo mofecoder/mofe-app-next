@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client'
+import { User } from '$/types'
 
 const prisma = new PrismaClient()
 
@@ -39,7 +40,7 @@ export async function createUserFromEmailAndPassword(
 
 export async function updateUser(
   uid: string,
-  data: { email?: string; userName?: string }
+  data: Partial<Pick<User, 'email' | 'userName' | 'role'>>
 ) {
   return await prisma.user.update({
     where: { uid },

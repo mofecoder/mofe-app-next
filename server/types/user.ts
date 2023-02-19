@@ -1,12 +1,7 @@
-type Role = 'TEMPORARY' | 'USER' | 'ADMIN'
+import { WithoutInternalColumn } from '$/types/index'
 
-export type User = {
-  uid: string
-  role: Role
-  userName: string | null
-  email: string
-  atcoderId: string | null
-}
+import type { User as PrismaUser } from '@prisma/client'
+export type User = WithoutInternalColumn<PrismaUser>
 
 export type AuthHeader = {
   idtoken: string

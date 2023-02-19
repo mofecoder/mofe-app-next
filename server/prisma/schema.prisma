@@ -13,6 +13,13 @@ enum Role {
     ADMIN
 }
 
+enum ContestManagerType {
+    OWNER
+    MANAGER
+    WRITER
+    TESTER
+}
+
 model User {
   id Int @id @default(autoincrement())
   uid String @unique
@@ -20,6 +27,7 @@ model User {
   userName String? @unique
   email String
   atcoderId String?
+  ownedContests ContestManager[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -31,11 +39,27 @@ model Contest {
   description String
   kind String
   penaltyTime Int @default(0)
+  managers ContestManager[]
   startAt DateTime
   endAt DateTime?
+  publishAt DateTime
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model ContestManager {
+  id Int @id @default(autoincrement())
+  user User @relation(fields: [userId], references: [id])
+  userId Int
+  contest Contest @relation(fields: [contestId], references: [id])
+  contestId Int
+  type ContestManagerType
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, contestId])
+}
+
 
 model Task {
   id    Int     @id @default(autoincrement())
